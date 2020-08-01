@@ -2,9 +2,9 @@
   "name": "node-gmp",
   "version": "0.1.0",
   "description": "NodeJS GMP",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "task1": "node src/task1.js",
+    "task1:watch": "nodemon src/task1.js"
   },
   "repository": {
     "type": "git",

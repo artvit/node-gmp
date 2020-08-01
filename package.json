@@ -4,7 +4,9 @@
   "description": "NodeJS GMP",
   "scripts": {
     "task1": "node src/task1.js",
-    "task1:watch": "nodemon src/task1.js"
+    "task1:watch": "nodemon src/task1.js",
+    "task2": "node src/task2.js",
+    "task2:watch": "nodemon src/task2.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +20,8 @@
   "homepage": "https://github.com/artvit/node-gmp#readme",
   "devDependencies": {
     "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "csvtojson": "^2.0.10"
   }
 }

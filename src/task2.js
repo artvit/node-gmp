@@ -1,6 +1,7 @@
-import fs from 'fs';
-import { pipeline, Transform } from 'stream';
 import csv from 'csvtojson';
+import fs from 'fs';
+import { EOL } from 'os';
+import { pipeline, Transform } from 'stream';
 
 
 class ObjectTransform extends Transform {
@@ -12,7 +13,7 @@ class ObjectTransform extends Transform {
       acc[key.toLowerCase()] = isNaN(oldValue) ? oldValue : +oldValue;
       return acc;
     }, {});
-    callback(null, JSON.stringify(newObject) + '\n');
+    callback(null, JSON.stringify(newObject) + EOL);
   }
 }
 

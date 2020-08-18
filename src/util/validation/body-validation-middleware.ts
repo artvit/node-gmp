@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import { Schema } from 'joi';
+import { errorResponse } from './error-response';
 
 export const bodyValidationMiddleware = (schema: Schema): RequestHandler => (req, res, next) => {
   const { error } = schema.validate(req.body, {
@@ -8,7 +9,7 @@ export const bodyValidationMiddleware = (schema: Schema): RequestHandler => (req
   });
 
   if (error?.isJoi) {
-    res.status(400).json(error);
+    res.status(400).json(errorResponse(error));
   } else {
     next();
   }

@@ -45,3 +45,13 @@ GET http://localhost:8080/api/users?loginSubstring=use&limit=2
 
 ###
 DELETE http://localhost:8080/api/users/e6c0514d-3b50-4a1d-a73d-53ad13f5a5c8
+
+###
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "login": "abc",
+  "password": "12",
+  "age": 142
+}

@@ -1,10 +1,7 @@
 import { Router } from 'express';
-import { userSchema } from '../models/user';
-import { limitSchema, loginSubstringSchema } from '../models/user';
+import { limitSchema, loginSubstringSchema, userSchema } from '../models/user';
 import { createUser, deleteUser, getUser, getUsers, updateUser } from '../services';
-import { bodyValidationMiddleware } from '../util/body-validation-middleware';
-import { queryValidationMiddleware } from '../util/query-validation-middleware';
-
+import { bodyValidationMiddleware, queryValidationMiddleware } from '../util/validation';
 
 
 export const userRouter = Router()

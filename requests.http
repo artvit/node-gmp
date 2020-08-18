@@ -1,0 +1,47 @@
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "login": "user1",
+  "password": "1234abcABC",
+  "age": 55
+}
+
+###
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "login": "user2",
+  "password": "1234abcABC",
+  "age": 130
+}
+
+###
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "login": "user3",
+  "password": "1234abcABC",
+  "age": 4
+}
+
+###
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "login": "abc",
+  "password": "1234abcABC",
+  "age": 55
+}
+
+###
+GET http://localhost:8080/api/users
+
+###
+GET http://localhost:8080/api/users?loginSubstring=use&limit=2
+
+###
+DELETE http://localhost:8080/api/users/e6c0514d-3b50-4a1d-a73d-53ad13f5a5c8

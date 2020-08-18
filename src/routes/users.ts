@@ -1,13 +1,25 @@
 import { Router } from 'express';
-import { UserStorage } from '../storage';
+import { userSchema } from '../models/user';
+import { limitSchema, loginSubstringSchema } from '../models/user';
+import { createUser, deleteUser, getUser, getUsers, updateUser } from '../services';
+import { bodyValidationMiddleware } from '../util/body-validation-middleware';
+import { queryValidationMiddleware } from '../util/query-validation-middleware';
 
-const userStorage = new UserStorage();
+
+
 export const userRouter = Router()
-  .get('/users', (req, res) => res.json(userStorage.getAll()))
-  .post('/users', (req, res) => res.json(userStorage.create(req.body)))
-  .put('/users/:id', (req, res) => res.json(userStorage.update(req.params['id'], req.body)))
-  .get('/users/:id', (req, res) => {
-    const user = userStorage.get(req.params['id']);
-    user ? res.json(user) : res.status(404).sendStatus(404);
-  })
-  .delete('/users/:id', (req, res) => res.json(userStorage.delete(req.params['id'])));
+  .get('/users', [
+    queryValidationMiddleware('loginSubstring', loginSubstringSchema),
+    queryValidationMiddleware('limit', limitSchema),
+    getUsers
+  ])
+  .post('/users', [
+    bodyValidationMiddleware(userSchema),
+    createUser
+  ])
+  .put('/users/:id', [
+    bodyValidationMiddleware(userSchema),
+    updateUser
+  ])
+  .get('/users/:id', getUser)
+  .delete('/users/:id', deleteUser);

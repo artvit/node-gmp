@@ -13,7 +13,10 @@ export class UserStorage {
     return this.users.get(id);
   }
 
-  update(id: string, user: User): User {
+  update(id: string, user: User): User | undefined {
+    if (!this.users.has(id)) {
+      return undefined;
+    }
     this.users.set(id, user);
     return user;
   }
@@ -24,10 +27,11 @@ export class UserStorage {
     return user;
   }
 
-  delete(id: string): void {
+  delete(id: string): User | undefined {
     const user = this.users.get(id);
     if (user) {
       user.isDeleted = true;
     }
+    return user;
   }
 }

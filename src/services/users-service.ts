@@ -9,6 +9,7 @@ export const getUsers: RequestHandler = (req, res) => {
   if (loginSubstring) {
     result = result.filter(user => user.login.includes(loginSubstring));
   }
+  result = result.sort((u1, u2) => u1.login.localeCompare(u2.login));
   const limit = typeof req.query.limit === 'string' ? +req.query.limit : null;
   if (limit) {
     result = result.slice(0, limit);

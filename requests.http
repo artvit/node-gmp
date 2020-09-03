@@ -41,6 +41,12 @@ Content-Type: application/json
 GET http://localhost:8080/api/users
 
 ###
+GET http://localhost:8080/api/users/0580d49e-db2f-4833-9ab5-e6bd682b57bb
+
+###
+GET http://localhost:8080/api/users/0580d49e-db2f-4833-9ab5-e6bd682b57b2
+
+###
 GET http://localhost:8080/api/users?loginSubstring=use&limit=2
 
 ###

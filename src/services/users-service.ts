@@ -1,41 +1,60 @@
-import { RequestHandler } from 'express';
 import { UserModel } from '../data-access';
+import { UserAttributes } from '../data-access/model/user';
+import { User } from '../models/user';
+import { DataMapper } from '../util/data-mapper';
+
+const dataMapper: DataMapper<User, UserAttributes> = {
+  toDomain:  ue => ({
+    id: ue.id,
+    login: ue.login,
+    age: ue.age,
+    password: ue.password
+  }),
+  toDalEntity: (user: User): UserAttributes => user
+};
 
 const userStorage = UserModel;
 
-export const getUsers: RequestHandler = async (req, res) => {
-  let result = await userStorage.findAll();
-  const loginSubstring = typeof req.query.loginSubstring === 'string' ? req.query.loginSubstring : null;
+export const getUsers = async (loginSubstring?: string, limit?: number): Promise<User[]> => {
+  const queryResult = await userStorage.findAll({ where: { isDeleted: false } });
+  let result = queryResult.map(dataMapper.toDomain);
   if (loginSubstring) {
     result = result.filter(user => user.login.includes(loginSubstring));
   }
   result = result.sort((u1, u2) => u1.login.localeCompare(u2.login));
-  const limit = typeof req.query.limit === 'string' ? +req.query.limit : null;
   if (limit) {
     result = result.slice(0, limit);
   }
-  res.json(result);
+  return result;
 };
 
-export const getUser: RequestHandler = async (req, res) => {
-  const user = await userStorage.findByPk(req.params['id']);
-  user ? res.json(user) : res.sendStatus(404);
-};
-
-export const createUser: RequestHandler = async (req, res) =>
-  res.status(201).json(await userStorage.create(req.body));
-
-export const updateUser: RequestHandler = async (req, res) => {
-  const updatedUser = await userStorage.update(req.body, { where: { id: req.params['id'] } });
-  updatedUser ? res.json(updatedUser) : res.sendStatus(404);
-};
-
-export const deleteUser: RequestHandler = async (req, res) => {
-  const deletedUser = await userStorage.findByPk(req.params['id']);
-  if (!deletedUser) {
-    res.sendStatus(404);
-    return;
+export const getUser = async (id: string): Promise<User | null> => {
+  const queryResult = await userStorage.findByPk(id);
+  if (!queryResult) {
+    return null;
   }
-  await deletedUser.update({ isDeleted: true });
-  res.sendStatus(200);
+  return dataMapper.toDomain(queryResult);
+};
+
+export const createUser = async (user: User): Promise<User> => {
+  const queryResult = await userStorage.create(dataMapper.toDalEntity(user));
+  return dataMapper.toDomain(queryResult);
+};
+
+export const updateUser = async (id: string, user: User): Promise<User | null> => {
+  const queryResult = await userStorage.findByPk(id);
+  if (!queryResult) {
+    return null;
+  }
+  const updatedUser = await queryResult.update(dataMapper.toDalEntity(user));
+  return dataMapper.toDomain(updatedUser);
+};
+
+export const deleteUser = async (id: string): Promise<User | null> => {
+  const deletedUser = await userStorage.findByPk(id);
+  if (!deletedUser) {
+    return null;
+  }
+  const user = await deletedUser.update({ isDeleted: true });
+  return dataMapper.toDomain(user);
 };

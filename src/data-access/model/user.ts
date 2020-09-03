@@ -1,7 +1,7 @@
 import { BuildOptions, DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
 
 
-interface UserAttributes {
+export interface UserAttributes {
   id: string;
   login: string;
   password: string;
@@ -9,10 +9,9 @@ interface UserAttributes {
   isDeleted?: boolean;
 }
 
-export interface UserModel extends Model<UserAttributes>, UserAttributes {}
-export class UserEntity extends Model<UserAttributes> {}
+export interface UserEntity extends Model<UserAttributes>, UserAttributes {}
 export type UserStatic = typeof Model & {
-  new (values?: Record<string, unknown>, options?: BuildOptions): UserModel;
+  new (values?: Record<string, unknown>, options?: BuildOptions): UserEntity;
 };
 
 export const initUser = (sequelize: Sequelize): UserStatic => {

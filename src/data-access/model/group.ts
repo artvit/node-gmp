@@ -1,5 +1,5 @@
 import {
-  Association,
+  Association, BelongsToManyAddAssociationsMixin,
   BelongsToManySetAssociationsMixin,
   DataTypes,
   Model,
@@ -8,6 +8,7 @@ import {
   UUIDV4
 } from 'sequelize';
 import { PermissionModel } from './permission';
+import { UserModel } from './user';
 
 export interface GroupAttributes {
   id: string;
@@ -20,8 +21,13 @@ export class GroupModel extends Model<GroupAttributes, Optional<GroupAttributes,
 
   permissionModels?: PermissionModel[];
   setPermissionModels!: BelongsToManySetAssociationsMixin<PermissionModel, string>
+
+  userModels?: UserModel[];
+  addUserModels!: BelongsToManyAddAssociationsMixin<UserModel, string>
+
   public static associations: {
     permissionModels: Association<GroupModel, PermissionModel>;
+    userModels: Association<UserModel, PermissionModel>;
   }
 }
 
@@ -40,5 +46,4 @@ export const initGroup = (sequelize: Sequelize): void => {
     tableName: 'groups',
     sequelize
   });
-  GroupModel.belongsToMany(PermissionModel, { through: 'GroupPermission', timestamps: false, as: 'permissionModels' });
 };

@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { groupSchema } from '../models/group/group-schema';
-import { createGroup, deleteGroup, getGroup, getGroups, updateGroup } from '../services/groups-service';
+import { addUsersToGroup, createGroup, deleteGroup, getGroup, getGroups, updateGroup } from '../services/group';
 import { bodyValidationMiddleware } from '../util/validation';
 
 export const groupRouter = Router()
@@ -27,5 +27,9 @@ export const groupRouter = Router()
   ])
   .delete('/groups/:id', async (req: Request, res: Response) => {
     const result = await deleteGroup(req.params.id);
+    result ? res.sendStatus(200) : res.sendStatus(404);
+  })
+  .post('/groups/:id/users/add', async (req, res) => {
+    const result = await addUsersToGroup(req.params.id, req.body.ids);
     result ? res.sendStatus(200) : res.sendStatus(404);
   });

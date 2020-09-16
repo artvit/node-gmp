@@ -1,23 +1,13 @@
-import { UserModel } from '../data-access';
-import { UserAttributes } from '../data-access';
-import { User } from '../models/user';
-import { DataMapper } from '../util/data-mapper';
+import { UserModel } from '../../data-access';
+import { User } from '../../models/user';
+import { userMapper } from './user-mapper';
 
-const dataMapper: DataMapper<User, UserAttributes> = {
-  toDomain: ue => ({
-    id: ue.id,
-    login: ue.login,
-    age: ue.age,
-    password: ue.password
-  }),
-  toDalEntity: (user: User): UserAttributes => ({ ...user, isDeleted: false })
-};
 
 const userStorage = UserModel;
 
 export const getUsers = async (loginSubstring?: string, limit?: number): Promise<User[]> => {
   const queryResult = await userStorage.findAll({ where: { isDeleted: false } });
-  let result = queryResult.map(dataMapper.toDomain);
+  let result = queryResult.map(userMapper.toDomain);
   if (loginSubstring) {
     result = result.filter(user => user.login.includes(loginSubstring));
   }
@@ -33,12 +23,12 @@ export const getUser = async (id: string): Promise<User | null> => {
   if (!queryResult) {
     return null;
   }
-  return dataMapper.toDomain(queryResult);
+  return userMapper.toDomain(queryResult);
 };
 
 export const createUser = async (user: User): Promise<User> => {
-  const queryResult = await userStorage.create(dataMapper.toDalEntity(user));
-  return dataMapper.toDomain(queryResult);
+  const queryResult = await userStorage.create(userMapper.toDalEntity(user));
+  return userMapper.toDomain(queryResult);
 };
 
 export const updateUser = async (id: string, user: User): Promise<User | null> => {
@@ -46,8 +36,8 @@ export const updateUser = async (id: string, user: User): Promise<User | null> =
   if (!queryResult) {
     return null;
   }
-  const updatedUser = await queryResult.update(dataMapper.toDalEntity(user));
-  return dataMapper.toDomain(updatedUser);
+  const updatedUser = await queryResult.update(userMapper.toDalEntity(user));
+  return userMapper.toDomain(updatedUser);
 };
 
 export const deleteUser = async (id: string): Promise<User | null> => {
@@ -56,5 +46,5 @@ export const deleteUser = async (id: string): Promise<User | null> => {
     return null;
   }
   const user = await deletedUser.update({ isDeleted: true });
-  return dataMapper.toDomain(user);
+  return userMapper.toDomain(user);
 };

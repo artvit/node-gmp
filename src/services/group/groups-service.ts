@@ -1,19 +1,7 @@
-import { GroupAttributes, GroupModel, PermissionModel, sequelize } from '../data-access';
-import { Group } from '../models/group';
-import { DataMapper } from '../util/data-mapper';
+import { GroupModel, PermissionModel, sequelize } from '../../data-access';
+import { Group } from '../../models/group';
+import { groupMapper } from './group-mapper';
 
-const groupMapper: DataMapper<Group, GroupAttributes> = {
-  toDomain: (de: GroupModel): Group => ({
-    id: de.id,
-    name: de.name,
-    permissions: de.permissionModels?.map(p => p.name) || []
-  }),
-
-  toDalEntity: (domain: Group): GroupAttributes => ({
-    id: domain.id,
-    name: domain.name
-  }),
-};
 
 export const getGroups = async (): Promise<Group[]> => {
   return (await GroupModel.findAll({include: [GroupModel.associations.permissionModels]}))
@@ -21,7 +9,10 @@ export const getGroups = async (): Promise<Group[]> => {
 };
 
 export const getGroup = async (id: string): Promise<Group | null> => {
-  const queryResult = await GroupModel.findByPk(id, { include: [GroupModel.associations.permissionModels] });
+  const queryResult = await GroupModel.findByPk(id, { include: [
+    GroupModel.associations.permissionModels,
+    GroupModel.associations.userModels
+  ] });
   return queryResult ? groupMapper.toDomain(queryResult) : null;
 };
 
@@ -58,4 +49,15 @@ export const deleteGroup = async (id: string): Promise<Group | null> => {
   }
   await group.destroy();
   return groupMapper.toDomain(group);
+};
+
+export const addUsersToGroup = async (groupId: string, userIds: string[]): Promise<true | null> => {
+  return await sequelize.transaction(async t => {
+    const group = await GroupModel.findByPk(groupId, { transaction: t });
+    if (!group) {
+      return null;
+    }
+    await group.addUserModels(userIds, { transaction: t });
+    return true;
+  });
 };

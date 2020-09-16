@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
-import { initGroup } from './model/group';
-import { initPermission } from './model/permission';
-import { initUser } from './model/user';
+import { GroupModel, initGroup } from './model/group';
+import { initPermission, PermissionModel } from './model/permission';
+import { initUser, UserModel } from './model/user';
 
 const uri = process.env.DB_URI;
 const runSync = !!process.env.DB_SYNC;
@@ -28,6 +28,10 @@ export const initDb = async (): Promise<void> => {
   initUser(sequelize);
   initPermission(sequelize);
   initGroup(sequelize);
+
+  GroupModel.belongsToMany(PermissionModel, { through: 'GroupPermission', timestamps: false, as: 'permissionModels' });
+  GroupModel.belongsToMany(UserModel, { through: 'UserGroup', timestamps: false, onDelete: 'cascade', as: 'userModels' });
+  UserModel.belongsToMany(GroupModel, { through: 'UserGroup', timestamps: false, onDelete: 'cascade' });
 
   if (runSync) {
     await sequelize.sync();

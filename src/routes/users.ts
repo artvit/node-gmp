@@ -1,4 +1,4 @@
-import { RequestHandler, Router, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import { limitSchema, loginSubstringSchema, userSchema } from '../models/user';
 import { createUser, deleteUser, getUser, getUsers, updateUser } from '../services';
 import { bodyValidationMiddleware, queryValidationMiddleware } from '../util/validation';
@@ -8,12 +8,12 @@ export const userRouter = Router()
   .get('/users', [
     queryValidationMiddleware('loginSubstring', loginSubstringSchema),
     queryValidationMiddleware('limit', limitSchema),
-    (async (req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
       const loginSubstring = typeof req.query.loginSubstring === 'string' ? req.query.loginSubstring : undefined;
       const limit = typeof req.query.limit === 'string' ? +req.query.limit : undefined;
       const users = await getUsers(loginSubstring, limit);
       res.json(users);
-    } ) as RequestHandler
+    }
   ])
   .post('/users', [
     bodyValidationMiddleware(userSchema),

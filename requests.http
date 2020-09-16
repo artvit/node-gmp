@@ -1,6 +1,9 @@
 GET http://localhost:8080/api/users
 
 ###
+GET http://localhost:8080/api/groups
+
+###
 GET http://localhost:8080/api/users/0580d49e-db2f-4833-9ab5-e6bd682b57bb
 
 ###
@@ -21,3 +24,13 @@ Content-Type: application/json
   "password": "12",
   "age": 142
 }
+###
+POST http://localhost:8080/api/groups
+Content-Type: application/json
+
+{
+  "name": "first",
+  "permissions": ["READ", "WRITE"]
+}
+###
+DELETE http://localhost:8080/api/groups/8031b640-e985-48a4-9bc4-7b7e6d37afaf

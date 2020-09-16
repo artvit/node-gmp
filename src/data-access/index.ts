@@ -1,4 +1,4 @@
-import { sequelize } from './init';
-import { initUser } from './model/user';
-
-export const UserModel = initUser(sequelize);
+export * from './init';
+export * from './model/user';
+export * from './model/permission';
+export * from './model/group';

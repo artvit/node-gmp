@@ -1,16 +1,16 @@
 import { UserModel } from '../data-access';
-import { UserAttributes } from '../data-access/model/user';
+import { UserAttributes } from '../data-access';
 import { User } from '../models/user';
 import { DataMapper } from '../util/data-mapper';
 
 const dataMapper: DataMapper<User, UserAttributes> = {
-  toDomain:  ue => ({
+  toDomain: ue => ({
     id: ue.id,
     login: ue.login,
     age: ue.age,
     password: ue.password
   }),
-  toDalEntity: (user: User): UserAttributes => user
+  toDalEntity: (user: User): UserAttributes => ({ ...user, isDeleted: false })
 };
 
 const userStorage = UserModel;

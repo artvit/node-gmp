@@ -1,4 +1,4 @@
-import { BuildOptions, DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
+import { DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
 
 
 export interface UserAttributes {
@@ -6,16 +6,19 @@ export interface UserAttributes {
   login: string;
   password: string;
   age: number;
-  isDeleted?: boolean;
+  isDeleted: boolean;
 }
 
-export interface UserEntity extends Model<UserAttributes>, UserAttributes {}
-export type UserStatic = typeof Model & {
-  new (values?: Record<string, unknown>, options?: BuildOptions): UserEntity;
-};
+export class UserModel extends Model<UserAttributes> implements UserAttributes {
+  age!: number;
+  id!: string;
+  isDeleted!: boolean;
+  login!: string;
+  password!: string;
+}
 
-export const initUser = (sequelize: Sequelize): UserStatic => {
-  return sequelize.define('User', {
+export const initUser = (sequelize: Sequelize): void => {
+  UserModel.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -39,10 +42,7 @@ export const initUser = (sequelize: Sequelize): UserStatic => {
       defaultValue: false
     }
   }, {
-    tableName: 'users'
+    tableName: 'users',
+    sequelize
   });
 };
-
-
-
-

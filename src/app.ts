@@ -5,17 +5,15 @@ import { groupRouter } from './routes/groups';
 
 initDb()
   .then(() => console.log('DB connected'))
-  .catch(err => console.error('DB initialization error: ', err));
+  .catch(err => {
+    console.error('DB initialization error: ', err);
+    process.exit(1);
+  });
 
 const PORT = process.env.PORT || 8080;
-const app = express();
-
-app.use(express.json());
-
-app
+const app = express()
+  .use(express.json())
   .use('/api', userRouter, groupRouter)
-  .use('/api/ping', (req, res) => {
-    res.send('pong');
-  });
+  .use((req, res) => res.sendStatus(404));
 
 app.listen(PORT);

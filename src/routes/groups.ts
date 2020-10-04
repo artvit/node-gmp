@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import { groupSchema } from '../models/group/group-schema';
 import { addUsersToGroup, createGroup, deleteGroup, getGroup, getGroups, updateGroup } from '../services/group';
 import { bodyValidationMiddleware } from '../util/validation';
-import { wrapAsync } from '../util/wrap-async';
+import { wrapAsync } from '../util/logging/wrap-async';
 
 export const groupRouter = Router()
   .get('/groups', wrapAsync(async (req: Request, res: Response) => {

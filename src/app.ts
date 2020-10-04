@@ -2,9 +2,9 @@ import express, { NextFunction, Request, Response } from 'express';
 import { initDb } from './data-access';
 import { userRouter } from './routes';
 import { groupRouter } from './routes/groups';
-import { logMiddleware } from './util/log-middleware';
-import { logger } from './util/logger';
-import { wrapAsync } from './util/wrap-async';
+import { logMiddleware } from './util/logging/log-middleware';
+import { logger } from './util/logging/logger';
+import { wrapAsync } from './util/logging/wrap-async';
 
 process
   .on('unhandledRejection', (reason, p) => {

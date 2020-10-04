@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import { limitSchema, loginSubstringSchema, userSchema } from '../models/user';
 import { createUser, deleteUser, getUser, getUsers, updateUser } from '../services';
 import { bodyValidationMiddleware, queryValidationMiddleware } from '../util/validation';
-import { wrapAsync } from '../util/wrap-async';
+import { wrapAsync } from '../util/logging/wrap-async';
 
 
 export const userRouter = Router()

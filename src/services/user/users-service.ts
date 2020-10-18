@@ -35,6 +35,19 @@ export const getUser = async (id: string): Promise<User | null> => {
   }
 };
 
+export const getUserByLogin = async (login: string): Promise<User | null> => {
+  try {
+    const queryResult = await UserModel.findOne({ where: { login: login } });
+    if (!queryResult) {
+      return null;
+    }
+    return userMapper.toDomain(queryResult);
+  } catch (e) {
+    logger.error({ function: 'getUserByLogin', args: { login }, error: e });
+    throw e;
+  }
+};
+
 export const createUser = async (user: User): Promise<User> => {
   try {
     const queryResult = await UserModel.create(userMapper.toDalEntity(user));

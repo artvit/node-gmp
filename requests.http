@@ -1,6 +1,7 @@
 ### USERS
 ###
 GET http://localhost:8080/api/users
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk5NmQ3M2I4LTIzNmEtNGMzZi1iYTNhLTI2OWVlNTRmZWYxNyIsImxvZ2luIjoiYWJjIiwiYWdlIjo1NSwicGFzc3dvcmQiOiIxMjM0YWJjQUJDIiwiaWF0IjoxNjAzMDY0MjU1LCJleHAiOjE2MDMwNjQzNzV9.WHOgaTccTI_Zas-wU4g0uOM6ltvtbw8ha3xSGu-fGuw
 
 ###
 GET http://localhost:8080/api/users/0580d49e-db2f-4833-9ab5-e6bd682b57bb
@@ -27,6 +28,7 @@ Content-Type: application/json
 ### GROUPS
 ###
 GET http://localhost:8080/api/groups
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk5NmQ3M2I4LTIzNmEtNGMzZi1iYTNhLTI2OWVlNTRmZWYxNyIsImxvZ2luIjoiYWJjIiwiYWdlIjo1NSwicGFzc3dvcmQiOiIxMjM0YWJjQUJDIiwiaWF0IjoxNjAzMDY0MjU1LCJleHAiOjE2MDMwNjQzNzV9.WHOgaTccTI_Zas-wU4g0uOM6ltvtbw8ha3xSGu-fGuw
 
 ###
 POST http://localhost:8080/api/groups
@@ -48,3 +50,13 @@ Content-Type: application/json
 ###
 
 GET http://localhost:8080/api/groups/009373a8-8677-4e4a-a066-bacfd0a08eb4
+
+###
+
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "login": "abc",
+  "password": "1234abcABC"
+}

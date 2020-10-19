@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
+import cors from 'cors';
 import { initDb } from './data-access';
 import { groupRouter, login, userRouter } from './routes';
 import { authMiddleware } from './util/jwt/auth-middleware';
@@ -24,6 +25,7 @@ initDb()
 const PORT = process.env.PORT || 8080;
 const app = express()
   .use(express.json())
+  .use(cors())
   .use(logMiddleware(logger))
   .post('/login', login)
   .use('/api', authMiddleware, userRouter, groupRouter)

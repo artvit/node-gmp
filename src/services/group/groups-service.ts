@@ -1,4 +1,4 @@
-import { GroupModel, PermissionModel, sequelize } from '../../data-access';
+import { getSequelize, GroupModel, PermissionModel } from '../../data-access';
 import { Group } from '../../models/group';
 import { logger } from '../../util/logging/logger';
 import { groupMapper } from './group-mapper';
@@ -32,7 +32,7 @@ export const getGroup = async (id: string): Promise<Group | null> => {
 export const createGroup = async (group: Group): Promise<Group> => {
   try {
     const permissions = await PermissionModel.findAll({ where: { name: group.permissions } });
-    const createdGroup = await sequelize.transaction(async t => {
+    const createdGroup = await getSequelize().transaction(async t => {
       const creatingGroup = await GroupModel.create(groupMapper.toDalEntity(group), { transaction: t });
       await creatingGroup.setPermissionModels(permissions, { transaction: t });
       return creatingGroup;
@@ -52,7 +52,7 @@ export const updateGroup = async (id: string, group: Group): Promise<Group | nul
       return null;
     }
     const permissions = await PermissionModel.findAll({ where: { name: group.permissions } });
-    const updatedGroup = await sequelize.transaction(async t => {
+    const updatedGroup = await getSequelize().transaction(async t => {
       const updatingGroup = await existingGroup.update(groupMapper.toDalEntity(group), { transaction: t });
       await updatingGroup.setPermissionModels(permissions, {
         transaction: t,
@@ -84,7 +84,7 @@ export const deleteGroup = async (id: string): Promise<Group | null> => {
 
 export const addUsersToGroup = async (groupId: string, userIds: string[]): Promise<true | null> => {
   try {
-    return await sequelize.transaction(async t => {
+    return await getSequelize().transaction(async t => {
       const group = await GroupModel.findByPk(groupId, { transaction: t });
       if (!group) {
         return null;

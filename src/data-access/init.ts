@@ -2,9 +2,10 @@ import { Sequelize } from 'sequelize';
 import { GroupModel, initGroup } from './model/group';
 import { initPermission, PermissionModel } from './model/permission';
 import { initUser, UserModel } from './model/user';
+import { getConfig } from '../config';
 
-const uri = process.env.DB_URI;
-const runSync = !!process.env.DB_SYNC;
+const uri = getConfig().DB_URI;
+const runSync = !!getConfig().DB_SYNC;
 let sequelize: Sequelize;
 
 export const getSequelize = (): Sequelize => {

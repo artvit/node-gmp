@@ -6,6 +6,7 @@ import { groupRouter, login, userRouter } from './routes';
 import { authMiddleware } from './util/jwt/auth-middleware';
 import { logMiddleware } from './util/logging/log-middleware';
 import { logger } from './util/logging/logger';
+import { getConfig } from './config';
 
 process
   .on('unhandledRejection', (reason, p) => {
@@ -15,14 +16,14 @@ process
     logger.error({ cause: 'uncaughtException', error: err});
   });
 
-initDb()
-  .then(() => console.log('DB connected'))
+await initDb()
+  .then(() => logger.info('DB connected'))
   .catch(err => {
-    console.error('DB initialization error: ', err);
+    logger.error('DB initialization error: ', err);
     process.exit(1);
   });
 
-const PORT = process.env.PORT || 8080;
+const PORT = +(getConfig().PORT || 8080);
 const app = express()
   .use(express.json())
   .use(cors())
@@ -46,3 +47,4 @@ const app = express()
   });
 
 app.listen(PORT);
+logger.info(`App started on port ${PORT}`);

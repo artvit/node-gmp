@@ -16,7 +16,7 @@ process
     logger.error({ cause: 'uncaughtException', error: err});
   });
 
-await initDb()
+initDb()
   .then(() => logger.info('DB connected'))
   .catch(err => {
     logger.error('DB initialization error: ', err);
